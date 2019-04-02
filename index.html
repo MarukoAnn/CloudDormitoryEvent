@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>后台数据</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="node_modules/bootstrap-table/dist/bootstrap-table.min.css">
+  <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="node_modules/bootstrap-table/dist/bootstrap-table.min.js"></script>
+  <script type="text/javascript" src="node_modules/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+
+  <!--<link rel="stylesheet" href="node_modules/bootstrap-table/dist/bootstrap-table.css">-->
+  <!--<script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>-->
+
+<body>
+<div class="index_header">
+ <h4 >云 上 智 舍</h4>
+</div>
+<div class="index_content">
+  <div class="pre-scrollable">
+    <table id="mytab" class="table table-hover"></table>
+  </div>
+</div>
+
+<div class="index_dialog">
+   <!--<div class="dialog">-->
+  <!--// 弹框-->
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header" >
+          <h5 class="modal-title" id="exampleModalLabel" >详 情</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" >
+          <div>
+            <label >姓名：</label>
+            <label id="name"></label>
+          </div>
+          <div>
+            <label >电话：</label>
+            <label id="phone"></label>
+          </div>
+          <div>
+            <label >投诉内容：</label>
+          </div>
+          <div>
+            <textarea name="" id="message" cols="60" rows="5" class="text"></textarea>
+          </div>
+          <div>
+            <label >图片展示：</label>
+            <div id="imageBody">
+            </div>
+          </div>
+          <!--<img src="" alt="">-->
+        </div>
+        <div class="modal-footer">
+          <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button-->
+          <button type="button" class="btn btn-primary"  data-dismiss="modal" style="outline: none;box-shadow:none;">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="ShowModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header" >
+          <h5 class="modal-title" id="exampleModalLabe" >图 片</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <!--<span aria-hidden="true">&times;</span>-->
+          </button>
+        </div>
+        <img src="" alt="" id="imageModel" class="imageModel">
+
+        <div class="modal-footer">
+          <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button-->
+          <button type="button" class="btn btn-primary"  data-dismiss="modal" style="outline: none;box-shadow:none;">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+<script type="text/javascript">
+    $('#mytab').bootstrapTable({
+        url: 'http://123.249.28.108:2753/findMessage',
+        method:'GET',
+        toolbar: "#toolbar",
+        sidePagination: "true",
+        striped: true, // 是否显示行间隔色
+        search : "true",
+        cache: false,
+        clickToSelect: true, //是否启用点击选中行
+        // showRefresh: true,//是否显示刷新按钮
+        // showRefresh: true,
+        pageNumber: 1,
+        pageSize: 8,
+        uniqueId: "id",
+        pagination: true, // 是否分页
+        sortable: true, // 是否启用排序
+        columns: [{
+            field: 'id',
+            title: '序号',
+        },
+            {
+                field: 'name',
+                title: '姓名'
+            },
+            {
+                field: 'phone',
+                title: '电话',
+
+            },
+            {
+                field: 'message',
+                title: '内容'
+            },
+            {
+                field: 'price',
+                title: '详情',
+                width: 'auto',
+                align: 'center',
+                valign: 'middle',
+                formatter: actionFormatter,
+            },
+
+        ]
+    });
+    //操作栏的格式化
+    function actionFormatter(value, row, index) {
+        // console.log(row);
+        let result = "";
+        result += '<button type="button" class="btn btn-primary detail" data-toggle="modal" data-target="#exampleModal" onclick="console.log('+row.id+');getData('+row.id+')">详 情 </button>';
+        return result;
+    }
+  function getData(dataid) {
+     $.ajax({
+         type: "GET",  //以post方式与后台沟通
+         url: "http://123.249.28.108:2753/findDetails?id="+dataid, //与此php页面沟通
+         dataType: 'json',//从php返回的值以 JSON方式 解释
+         // data: json,//发给php的数据有两项，分别是上面传来的u和p
+         success: function (data) {
+             console.log(data);
+
+             if (data.status === '200'){
+                 if (data.values[0].name) {
+                     $('#name').text(data.values[0].name);
+
+                 }
+                 if (data.values[0].message) {
+                     $('#message').val(data.values[0].message);
+
+                 }
+                 if (data.values[0].phone) {
+                     $('#phone').text(data.values[0].phone);
+                 }
+                 // console.log(data);
+                 var url ='http://123.249.28.108:2753/complaint-img/';
+                 $image = '<img  src="#url#" alt="" class="imageDetail" data-target="#ShowModal" data-toggle="modal" onclick="imgUrl(event)">';
+                 // if (data.values[i].photoName)
+                 for (let i=0;i<data.values.length;i++){
+                     if (data.values[i].photoName) {
+                         $('#imageBody').append($image.replace('#url#',url+data.values[i].photoName));
+                     }
+                 }
+             }else {
+                 alert('数据获取失败')
+             }
+         },
+         error: function (e) {
+             alert('服务器异常');
+         }
+     });
+  }
+
+   $('#exampleModal').on('hidden.bs.modal', function () {
+        // 执行一些动作...
+        // console.log(213);
+        $('#name').text('');
+        $('#message').val('');
+        $('#phone').text('');
+        $('#imageBody').find('img').remove();
+    });
+   // $('.imageDetail').click(function (e) {
+   //     console.log(e);
+   // })
+  function imgUrl(e) {
+      console.log(e.target.currentSrc);
+      $('#imageModel').attr('src',e.target.currentSrc);
+  }
+</script>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="css/login.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
+</head>
+<body>
+  <!--<div class="container">-->
+  <div class="login">
+    <div class="title">
+      <p>用户登录Login</p>
+    </div>
+    <div class="content">
+      <div class="username">
+        <label for="username">用户名：</label>
+        <div class="row" style="margin: 0"><input id="username" type="text" placeholder="请输入用户名"></div>
+      </div>
+      <div  class="username">
+        <label for="password">密码：</label>
+        <div class="row" style="margin: 0"><input id="password" type="password" placeholder="请输入密码"></div>
+      </div>
+      <button class="btn btn-primary loginbtn"  onclick="login()">登录</button>
+    </div>
+  </div>
+
+  <!--</div>-->
+</body>
+<script type="text/javascript">
+    function login() { //函数 login();
+        // alert("login");
+        var username = $("#username").val();//取框中的用户名
+        var password = $("#password").val();//取框中的密码
+        var json = "username=" + username + "&password=" + password;
+        console.log(json);
+        // $(location).prop('href', 'index.html');
+        $.ajax({ //一个Ajax过程
+            type: "GET",  //以post方式与后台沟通
+            url: "http://123.249.28.108:2753/login?"+json, //与此php页面沟通
+            dataType: 'json',//从php返回的值以 JSON方式 解释
+            // data: json,//发给php的数据有两项，分别是上面传来的u和p
+            success: function (data) {
+                //alert(json.username+'\n'+json.password); //把php中的返回值（json.username）给 alert出来
+                // $('#result').html("姓名:" + json.username + "<br/>密码:" + json.password); //把php中的返回值显示在预定义
+                // 的result定位符位置
+                console.log(data);
+                if (data.status === "200") {
+                    // alert('登录成功');
+                    $(location).prop('href', 'index.html')
+                } else {
+                    alert('登录失败');
+                }
+
+            },
+            error: function (e) {
+                // console.log(e);
+                alert('服务器异常');
+            }
+        });
+    }
+</script>
+</html>
