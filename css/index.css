@@ -17,6 +17,7 @@ body {
     width: 15vw;
     height: 25vh;
     margin-top: 1vh;
+    text-align: center;
 }
 .imageModel {
     width: auto;
@@ -46,5 +47,6 @@ body {
         width: 20vw;
         height: 20vw;
         margin: 1vw;
+        text-align: center;
     }
 }

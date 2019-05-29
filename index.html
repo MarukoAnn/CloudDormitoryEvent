@@ -55,8 +55,11 @@
           </div>
           <div>
             <label >图片展示：</label>
-            <div id="imageBody">
+            <!--<div >-->
+              <div id="imageBody" style="text-align: center">
+              <!--</div>-->
             </div>
+
           </div>
           <!--<img src="" alt="">-->
         </div>
@@ -90,7 +93,7 @@
 </body>
 <script type="text/javascript">
     $('#mytab').bootstrapTable({
-        url: 'http://123.249.28.108:2753/findMessage',
+        url: 'http://120.78.156.30:8848/complain/findMessage',
         method:'GET',
         toolbar: "#toolbar",
         sidePagination: "true",
@@ -141,9 +144,10 @@
         return result;
     }
   function getData(dataid) {
+        console.log(dataid);
      $.ajax({
          type: "GET",  //以post方式与后台沟通
-         url: "http://123.249.28.108:2753/findDetails?id="+dataid, //与此php页面沟通
+         url: "http://120.78.156.30:8848/complain/findDetails?id="+dataid, //与此php页面沟通
          dataType: 'json',//从php返回的值以 JSON方式 解释
          // data: json,//发给php的数据有两项，分别是上面传来的u和p
          success: function (data) {
@@ -162,7 +166,7 @@
                      $('#phone').text(data.values[0].phone);
                  }
                  // console.log(data);
-                 var url ='http://123.249.28.108:2753/complaint-img/';
+                 var url ='http://120.78.156.30:8848/complain/complaint-img/';
                  $image = '<img  src="#url#" alt="" class="imageDetail" data-target="#ShowModal" data-toggle="modal" onclick="imgUrl(event)">';
                  // if (data.values[i].photoName)
                  for (let i=0;i<data.values.length;i++){
@@ -188,13 +192,36 @@
         $('#phone').text('');
         $('#imageBody').find('img').remove();
     });
-   // $('.imageDetail').click(function (e) {
-   //     console.log(e);
-   // })
   function imgUrl(e) {
       console.log(e.target.currentSrc);
       $('#imageModel').attr('src',e.target.currentSrc);
   }
+// $(document).ready(function () {
+//     $.ajax({
+//         url:'http://123.249.28.108:2753/findMessage',
+//         type:'GET' ,
+//         dataType: 'json',//从php返回的值以 JSON方式 解释
+//         // data: json,//发给php的数据有两项，分别是上面传来的u和p
+//         success: function (data) {
+//             //alert(json.username+'\n'+json.password); //把php中的返回值（json.username）给 alert出来
+//             // $('#result').html("姓名:" + json.username + "<br/>密码:" + json.password); //把php中的返回值显示在预定义
+//             // 的result定位符位置
+//             console.log(data);
+//             if (data.status === "200") {
+//                 // alert('登录成功');
+//                 // $(location).prop('href', 'index.html')
+//             } else {
+//                 alert('登录失败');
+//             }
+//
+//         },
+//         error: function (e) {
+//             console.log(e);
+//             alert('服务器异常');
+//         }
+//     })
+// })
+
 </script>
 
 </html>

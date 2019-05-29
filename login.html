@@ -39,7 +39,7 @@
         // $(location).prop('href', 'index.html');
         $.ajax({ //一个Ajax过程
             type: "GET",  //以post方式与后台沟通
-            url: "http://123.249.28.108:2753/login?"+json, //与此php页面沟通
+            url: "http://120.78.156.30:8848/complain/login?"+json, //与此php页面沟通
             dataType: 'json',//从php返回的值以 JSON方式 解释
             // data: json,//发给php的数据有两项，分别是上面传来的u和p
             success: function (data) {
@@ -48,7 +48,7 @@
                 // 的result定位符位置
                 console.log(data);
                 if (data.status === "200") {
-                    // alert('登录成功');
+                    alert('登录成功');
                     $(location).prop('href', 'index.html')
                 } else {
                     alert('登录失败');
